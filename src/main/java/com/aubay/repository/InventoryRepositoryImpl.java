@@ -2,11 +2,11 @@ package com.aubay.repository;
 
 import com.aubay.entity.Inventory;
 import io.micronaut.transaction.annotation.ReadOnly;
+import io.micronaut.transaction.annotation.TransactionalAdvice;
 
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +19,6 @@ public class InventoryRepositoryImpl implements InventoryRepository {
         this.entityManager = entityManager;
     }
 
-
     @Override
     @ReadOnly
     public Optional<Inventory> findByProduct(String product) {
@@ -30,7 +29,7 @@ public class InventoryRepositoryImpl implements InventoryRepository {
     }
 
     @Override
-    @Transactional
+    @TransactionalAdvice
     public Inventory save(String product, Long quantity) {
         Inventory inventory = new Inventory(product, quantity);
         entityManager.persist(inventory);
@@ -38,7 +37,7 @@ public class InventoryRepositoryImpl implements InventoryRepository {
     }
 
     @Override
-    @Transactional
+    @TransactionalAdvice
     public void delete(String product) {
         findByProduct(product).ifPresent(entityManager::remove);
     }
@@ -51,11 +50,27 @@ public class InventoryRepositoryImpl implements InventoryRepository {
     }
 
     @Override
-    @Transactional
+    @TransactionalAdvice
     public int update(String product, Long quantity) {
         return entityManager.createQuery("update Inventory i set i.quantity = :quantity where i.product = :product")
                 .setParameter("product", product)
                 .setParameter("quantity", quantity).executeUpdate();
+    }
+
+    @Override
+    @TransactionalAdvice
+    public Boolean reserve(String product, Long quantity) {
+        entityManager.createQuery("update Inventory i set i.quantity = i.quantity - :quantity where i.product = :product")
+                .setParameter("product", product)
+                .setParameter("quantity", quantity).executeUpdate();
+        Optional<Inventory> byProduct = findByProduct(product);
+        Boolean aBoolean = byProduct.map(Inventory::getQuantity).map(q -> q >= 0).orElse(false);
+        if (!aBoolean) {
+            entityManager.createQuery("update Inventory i set i.quantity = i.quantity + :quantity where i.product = :product")
+                    .setParameter("product", product)
+                    .setParameter("quantity", quantity).executeUpdate();
+        }
+        return aBoolean;
     }
 
 

@@ -1,9 +1,12 @@
 package com.aubay.commands;
 
+import io.micronaut.core.annotation.Introspected;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class TryRetrieveCommand {
+@Introspected
+public class ReserveCommand {
 
     @NotBlank
     private String product;
@@ -11,10 +14,10 @@ public class TryRetrieveCommand {
     @NotNull
     private Long quantity;
 
-    public TryRetrieveCommand() {
+    public ReserveCommand() {
     }
 
-    public TryRetrieveCommand(String product, Long quantity) {
+    public ReserveCommand(String product, Long quantity) {
         this.product = product;
         this.quantity = quantity;
     }

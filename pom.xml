@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="https://maven.apache.org/POM/4.0.0" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xmlns="https://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.aubay</groupId>
@@ -15,6 +15,7 @@
 
     <properties>
         <packaging>jar</packaging>
+        <!--        <packaging>docker</packaging>-->
         <jdk.version>11</jdk.version>
         <release.version>11</release.version>
         <micronaut.version>2.5.4</micronaut.version>
@@ -30,6 +31,12 @@
     </repositories>
 
     <dependencies>
+
+        <dependency>
+            <artifactId>commons-lang</artifactId>
+            <groupId>commons-lang</groupId>
+            <version>2.6</version>
+        </dependency>
         <dependency>
             <groupId>io.micronaut</groupId>
             <artifactId>micronaut-inject</artifactId>
