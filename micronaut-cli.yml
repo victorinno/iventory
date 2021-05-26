@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: com.aubay
+testFramework: junit
+sourceLanguage: java
+buildTool: maven
+features: [ annotation-api, app-name, h2, hibernate-jpa, http-client, java, java-application, jax-rs, jdbc-hikari, junit, logback, maven, readme, shade, tomcat-server, yaml ]
